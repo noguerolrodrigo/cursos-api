@@ -47,8 +47,9 @@ public class CursoController {
     // URL: POST http://localhost:8080/api/cursos/1/estudiantes/3
     // (Asigna el estudiante 3 al curso 1)
     @PostMapping("/cursos/{cursoId}/estudiantes/{estudianteId}")
-    public Curso asignarEstudiante(@PathVariable Long cursoId, @PathVariable Long estudianteId) {
-        return cursoService.asignarEstudiante(cursoId, estudianteId);
+    public String asignarEstudiante(@PathVariable Long cursoId, @PathVariable Long estudianteId) {
+        cursoService.asignarEstudiante(cursoId, estudianteId);
+        return "✅ Estudiante asignado correctamente al curso.";
     }
 
     // --- REQUISITO 5: Devolver la lista de cursos en los que está un estudiante ---

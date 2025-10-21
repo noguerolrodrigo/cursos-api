@@ -1,10 +1,12 @@
 package com.noguerolrodrigo.cursos_api.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Curso {
 
     @Id
@@ -25,7 +27,7 @@ public class Curso {
             inverseJoinColumns = @JoinColumn(name = "estudiante_id")
     )
     @JsonIgnoreProperties("cursos")
-    private Set<Estudiante> estudiantes;
+    private Set<Estudiante> estudiantes = new HashSet<>();
 
     // --- Getters y Setters ---
 

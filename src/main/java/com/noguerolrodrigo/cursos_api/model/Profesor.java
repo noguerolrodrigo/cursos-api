@@ -1,10 +1,12 @@
 package com.noguerolrodrigo.cursos_api.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Profesor {
 
     @Id
@@ -16,8 +18,7 @@ public class Profesor {
 
     @OneToMany(mappedBy = "profesor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("profesor")
-    private List<Curso> cursos;
-
+    private List<Curso> cursos = new ArrayList<>();
     // --- Getters y Setters ---
 
     public Long getId() {

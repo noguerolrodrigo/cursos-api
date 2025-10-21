@@ -1,10 +1,12 @@
 package com.noguerolrodrigo.cursos_api.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Estudiante {
 
     @Id
@@ -16,7 +18,7 @@ public class Estudiante {
 
     @ManyToMany(mappedBy = "estudiantes")
     @JsonIgnoreProperties("estudiantes")
-    private Set<Curso> cursos;
+    private Set<Curso> cursos = new HashSet<>();
 
     // --- Getters y Setters ---
 
