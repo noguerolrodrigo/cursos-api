@@ -1,4 +1,10 @@
 package com.noguerolrodrigo.cursos_api.repository;
 
-public interface EstudianteRepository {
+import com.noguerolrodrigo.cursos_api.model.Estudiante;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
+
 }
