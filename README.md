@@ -8,6 +8,16 @@ Proyecto de API REST para la gestión de cursos, profesores y estudiantes, reali
 * Spring Data JPA (con Hibernate)
 * Base de datos H2 (con persistencia en archivo)
 * Maven
+* Lombok
+
+## Estructura del Proyecto
+
+La API sigue una arquitectura en capas basada en las correcciones recibidas:
+
+* **Controllers:** Separados por entidad (`ProfesorController`, `EstudianteController`, `CursoController`) para manejar las peticiones HTTP.
+* **Services:** Separados por entidad y usando interfaces (`IProfesorService`, `IEstudianteService`, `ICursoService`) para la lógica de negocio, con sus implementaciones (`...ServiceImpl`).
+* **Repositories:** Interfaces de Spring Data JPA para el acceso a datos.
+* **Models:** Entidades JPA (`Profesor`, `Estudiante`, `Curso`) utilizando Lombok para reducir código boilerplate (getters, setters, etc.).
 
 ---
 
