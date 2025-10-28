@@ -1,48 +1,29 @@
 package com.noguerolrodrigo.cursos_api.model;
 
+import lombok.AllArgsConstructor; // Import
+import lombok.Data; // Import
+import lombok.NoArgsConstructor; // Import
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Data // <-- Generates getters, setters, toString, equals, hashCode!
+@NoArgsConstructor // <-- Generates empty constructor
+@AllArgsConstructor // <-- Generates constructor with all fields
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cursos"}) // Added "handler" for safety
 public class Profesor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
     private String email;
 
     @OneToMany(mappedBy = "profesor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("profesor")
+    @JsonIgnoreProperties("profesor") // Avoid infinite loop with Curso
     private List<Curso> cursos = new ArrayList<>();
-    // --- Getters y Setters ---
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public List<Curso> getCursos() {
-        return cursos;
-    }
-    public void setCursos(List<Curso> cursos) {
-        this.cursos = cursos;
-    }
+    // No more manual getters or setters! 🎉
 }

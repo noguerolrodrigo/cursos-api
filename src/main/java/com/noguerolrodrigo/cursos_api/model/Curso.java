@@ -1,23 +1,28 @@
 package com.noguerolrodrigo.cursos_api.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Added "handler"
 public class Curso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profesor_id")
-    @JsonIgnoreProperties("cursos")
+    @JsonIgnoreProperties("cursos") // Avoid infinite loop with Profesor
     private Profesor profesor;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -26,33 +31,8 @@ public class Curso {
             joinColumns = @JoinColumn(name = "curso_id"),
             inverseJoinColumns = @JoinColumn(name = "estudiante_id")
     )
-    @JsonIgnoreProperties("cursos")
+    @JsonIgnoreProperties("estudiantes") // Avoid infinite loop with Estudiante
     private Set<Estudiante> estudiantes = new HashSet<>();
 
-    // --- Getters y Setters ---
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public Profesor getProfesor() {
-        return profesor;
-    }
-    public void setProfesor(Profesor profesor) {
-        this.profesor = profesor;
-    }
-    public Set<Estudiante> getEstudiantes() {
-        return estudiantes;
-    }
-    public void setEstudiantes(Set<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
-    }
+    // No more manual getters or setters!
 }
