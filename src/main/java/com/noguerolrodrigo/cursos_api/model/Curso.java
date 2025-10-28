@@ -1,18 +1,19 @@
 package com.noguerolrodrigo.cursos_api.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"profesor", "estudiantes"})
+@EqualsAndHashCode(exclude = {"profesor", "estudiantes"}) // <-- ¡LA SOLUCIÓN!
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Added "handler"
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Curso {
 
     @Id
@@ -22,7 +23,7 @@ public class Curso {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profesor_id")
-    @JsonIgnoreProperties("cursos") // Avoid infinite loop with Profesor
+    @JsonIgnoreProperties("cursos")
     private Profesor profesor;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -31,8 +32,6 @@ public class Curso {
             joinColumns = @JoinColumn(name = "curso_id"),
             inverseJoinColumns = @JoinColumn(name = "estudiante_id")
     )
-    @JsonIgnoreProperties("estudiantes") // Avoid infinite loop with Estudiante
+    @JsonIgnoreProperties("estudiantes")
     private Set<Estudiante> estudiantes = new HashSet<>();
-
-    // No more manual getters or setters!
 }
