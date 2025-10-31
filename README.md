@@ -1,6 +1,6 @@
-# API de Cursos (Spring Boot)
+# API de Cursos (Spring Boot) - Proyecto Refactorizado
 
-Proyecto de API REST para la gestión de cursos, profesores y estudiantes, realizado con Spring Boot para la facultad.
+Este es un proyecto de API REST para la gestión de cursos, profesores y estudiantes. El proyecto original fue refactorizado para cumplir con los estándares de arquitectura de software, incluyendo la separación de responsabilidades (capas), el uso de Interfaces y el patrón DTO/Mapper.
 
 ## Tecnologías Utilizadas
 * Java 17
@@ -12,12 +12,14 @@ Proyecto de API REST para la gestión de cursos, profesores y estudiantes, reali
 
 ## Estructura del Proyecto
 
-La API sigue una arquitectura en capas basada en las correcciones recibidas:
+La API sigue una arquitectura en capas profesional:
 
-* **Controllers:** Separados por entidad (`ProfesorController`, `EstudianteController`, `CursoController`) para manejar las peticiones HTTP.
-* **Services:** Separados por entidad y usando interfaces (`IProfesorService`, `IEstudianteService`, `ICursoService`) para la lógica de negocio, con sus implementaciones (`...ServiceImpl`).
-* **Repositories:** Interfaces de Spring Data JPA para el acceso a datos.
-* **Models:** Entidades JPA (`Profesor`, `Estudiante`, `Curso`) utilizando Lombok para reducir código boilerplate (getters, setters, etc.).
+* **`controller`**: Controladores separados por entidad (`ProfesorController`, `EstudianteController`, `CursoController`) que manejan las peticiones HTTP.
+* **`entity`**: Contiene las entidades de la base de datos (`Profesor`, `Estudiante`, `Curso`).
+* **`dto`**: (Data Transfer Objects) Clases `record` simples (`ProfesorDto`, `ProfesorCreate`, etc.) que se usan para transferir datos hacia y desde el controlador, evitando exponer las entidades.
+* **`mapper`**: Componentes (`ProfesorMapper`, etc.) responsables de convertir Entidades $\leftrightarrow$ DTOs.
+* **`service`**: Lógica de negocio separada en Interfaces (`IProfesorService`, etc.) y sus Implementaciones (`ProfesorServiceImpl`, etc.).
+* **`repository`**: Interfaces de Spring Data JPA para el acceso a datos.
 
 ---
 
@@ -25,8 +27,9 @@ La API sigue una arquitectura en capas basada en las correcciones recibidas:
 
 1.  Clonar el repositorio.
 2.  Abrir el proyecto con IntelliJ IDEA.
-3.  Ejecutar el método `main` de la clase `CursosApiApplication.java`.
-4.  El servidor se iniciará en `http://localhost:8080`.
+3.  (¡Importante!) Si IntelliJ muestra errores en rojo, asegurarse de tener el **Plugin de Lombok** instalado y habilitar **Annotation Processing** (`File > Settings > Build > Compiler > Annotation Processors`).
+4.  Ejecutar el método `main` de la clase `CursosApiApplication.java`.
+5.  El servidor se iniciará en `http://localhost:8080`.
 
 ### Base de Datos (H2)
 
@@ -42,54 +45,72 @@ La API sigue una arquitectura en capas basada en las correcciones recibidas:
 
 ## Cómo Probar la API (Postman)
 
-Se recomienda seguir esta secuencia de 7 pasos para probar todas las funcionalidades:
+**¡Importante!** Se recomienda **borrar el archivo `cursos-db.mv.db`** antes de correr la secuencia de pruebas para empezar con una base de datos limpia.
 
 ### 1. POST: Crear Profesor
 * **Método:** `POST`
 * **URL:** `http://localhost:8080/api/profesores`
-* **Body (JSON):**
+* **Body (JSON) (Usa `ProfesorCreate`):**
     ```json
-    { "nombre": "Juan Perez", "email": "juan.perez@email.com" }
+    {
+        "nombre": "Juan Perez",
+        "mail": "juan.perez@email.com"
+    }
     ```
+* *(Respuesta: `ProfesorDto` con ID 1)*
 
 ### 2. POST: Crear Estudiante (Ana)
 * **Método:** `POST`
 * **URL:** `http://localhost:8080/api/estudiantes`
-* **Body (JSON):**
+* **Body (JSON) (Usa `EstudianteCreate`):**
     ```json
-    { "nombre": "Ana Gomez", "matricula": "A-123" }
+    {
+        "nombre": "Ana Gomez",
+        "matricula": "A-123"
+    }
     ```
+* *(Respuesta: `EstudianteDto` con ID 1)*
 
 ### 3. POST: Crear Estudiante (Luis)
 * **Método:** `POST`
 * **URL:** `http://localhost:8080/api/estudiantes`
-* **Body (JSON):**
+* **Body (JSON) (Usa `EstudianteCreate`):**
     ```json
-    { "nombre": "Luis Paz", "matricula": "L-456" }
+    {
+        "nombre": "Luis Paz",
+        "matricula": "L-456"
+    }
     ```
+* *(Respuesta: `EstudianteDto` con ID 2)*
 
 ### 4. POST: (Req. 3) Crear Curso
 * **Método:** `POST`
-* **URL:** `http://localhost:8080/api/cursos?profesorId=1`
-* **Body (JSON):**
+* **URL:** `http://localhost:8080/api/cursos`
+* **Body (JSON) (Usa `CursoCreate`):**
     ```json
-    { "nombre": "Programacion Avanzada" }
+    {
+        "nombre": "Programacion Avanzada",
+        "profesorId": 1
+    }
     ```
+* *(Respuesta: `CursoDto` completo con el profesor)*
 
 ### 5. POST: (Req. 4) Asignar Ana al Curso
 * **Método:** `POST`
 * **URL:** `http://localhost:8080/api/cursos/1/estudiantes/1`
 * **Body:** `none`
+* *(Respuesta: `CursoDto` actualizado, con Ana en la lista de estudiantes)*
 
 ### 6. POST: (Req. 4) Asignar Luis al Curso
 * **Método:** `POST`
 * **URL:** `http://localhost:8080/api/cursos/1/estudiantes/2`
 * **Body:** `none`
+* *(Respuesta: `CursoDto` actualizado, con Ana y Luis)*
 
 ### 7. GET: (Req. 5) Ver Cursos de Ana
 * **Método:** `GET`
 * **URL:** `http://localhost:8080/api/estudiantes/1/cursos`
-* *(Devuelve la lista de cursos de Ana)*
+* *(Respuesta: Una lista `[ ]` conteniendo el `CursoDto` de "Programacion Avanzada")*
 
 ### Otros Endpoints (Req. 2)
 * `GET http://localhost:8080/api/cursos`

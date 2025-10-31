@@ -1,6 +1,6 @@
 package com.noguerolrodrigo.cursos_api.repository;
 
-import com.noguerolrodrigo.cursos_api.model.Curso;
+import com.noguerolrodrigo.cursos_api.entity.Curso;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

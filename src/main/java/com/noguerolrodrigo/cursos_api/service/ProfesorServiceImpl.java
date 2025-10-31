@@ -1,30 +1,38 @@
 package com.noguerolrodrigo.cursos_api.service;
 
-import com.noguerolrodrigo.cursos_api.model.Profesor;
+import com.noguerolrodrigo.cursos_api.entity.Profesor;
+import com.noguerolrodrigo.cursos_api.entity.dto.profesor.ProfesorCreate;
+import com.noguerolrodrigo.cursos_api.entity.dto.profesor.ProfesorDto;
+import com.noguerolrodrigo.cursos_api.entity.mapper.ProfesorMapper;
 import com.noguerolrodrigo.cursos_api.repository.ProfesorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service // ¡Importante!
-public class ProfesorServiceImpl implements IProfesorService { // ¡Implementa la interfaz!
+@Service
+public class ProfesorServiceImpl implements IProfesorService {
 
-    // Inyecta solo el repositorio que necesita
     @Autowired
     private ProfesorRepository profesorRepository;
+    @Autowired
+    private ProfesorMapper profesorMapper;
 
-    @Override // Le dice a Java que este método está en el "contrato"
+    @Override
     @Transactional(readOnly = true)
-    public List<Profesor> listarProfesores() {
-        // Esta lógica la "robamos" de tu viejo CursoService
-        return profesorRepository.findAll();
+    public List<ProfesorDto> listarProfesores() {
+        return profesorRepository.findAll()
+                .stream()
+                .map(profesorMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Profesor crearProfesor(Profesor profesor) {
-        // Esta lógica la "robamos" de tu viejo CursoService
-        return profesorRepository.save(profesor);
+    public ProfesorDto crearProfesor(ProfesorCreate dto) {
+        Profesor profesor = profesorMapper.toEntity(dto);
+        Profesor profesorGuardado = profesorRepository.save(profesor);
+        return profesorMapper.toDto(profesorGuardado);
     }
 }

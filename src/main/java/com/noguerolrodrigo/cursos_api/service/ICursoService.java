@@ -1,10 +1,12 @@
 package com.noguerolrodrigo.cursos_api.service;
 
-import com.noguerolrodrigo.cursos_api.model.Curso;
+// ¡Imports de los DTOs!
+import com.noguerolrodrigo.cursos_api.entity.dto.curso.CursoCreate;
+import com.noguerolrodrigo.cursos_api.entity.dto.curso.CursoDto;
 import java.util.List;
 
 public interface ICursoService {
-    List<Curso> listarCursos();
-    Curso crearCurso(Curso curso, Long profesorId);
-    Curso asignarEstudiante(Long cursoId, Long estudianteId);
+    List<CursoDto> listarCursos();
+    CursoDto crearCurso(CursoCreate dto);
+    CursoDto asignarEstudiante(Long cursoId, Long estudianteId);
 }

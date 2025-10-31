@@ -1,4 +1,4 @@
-package com.noguerolrodrigo.cursos_api.model;
+package com.noguerolrodrigo.cursos_api.entity; // <-- ¡Este es el paquete!
 
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,16 +9,17 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString(exclude = {"profesor", "estudiantes"})
-@EqualsAndHashCode(exclude = {"profesor", "estudiantes"}) // <-- ¡LA SOLUCIÓN!
+@EqualsAndHashCode(exclude = {"profesor", "estudiantes"}) // <-- Soluciona el bucle de Lombok
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Curso {
+public class Curso { // ¡Esta es tu "caja fuerte"!
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,10 +1,10 @@
 package com.noguerolrodrigo.cursos_api.controller;
 
-import com.noguerolrodrigo.cursos_api.model.Curso;
-import com.noguerolrodrigo.cursos_api.service.ICursoService; // <-- ¡La Interfaz!
+import com.noguerolrodrigo.cursos_api.entity.dto.curso.CursoCreate;
+import com.noguerolrodrigo.cursos_api.entity.dto.curso.CursoDto;
+import com.noguerolrodrigo.cursos_api.service.ICursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -12,20 +12,20 @@ import java.util.List;
 public class CursoController {
 
     @Autowired
-    private ICursoService cursoService; // <-- ¡Inyecta la Interfaz!
+    private ICursoService cursoService;
 
     @GetMapping
-    public List<Curso> listarCursos() {
+    public List<CursoDto> listarCursos() {
         return cursoService.listarCursos();
     }
 
     @PostMapping
-    public Curso crearCurso(@RequestBody Curso curso, @RequestParam Long profesorId) {
-        return cursoService.crearCurso(curso, profesorId);
+    public CursoDto crearCurso(@RequestBody CursoCreate dto) {
+        return cursoService.crearCurso(dto);
     }
 
     @PostMapping("/{cursoId}/estudiantes/{estudianteId}")
-    public Curso asignarEstudiante(@PathVariable Long cursoId, @PathVariable Long estudianteId) {
+    public CursoDto asignarEstudiante(@PathVariable Long cursoId, @PathVariable Long estudianteId) {
         return cursoService.asignarEstudiante(cursoId, estudianteId);
     }
 }

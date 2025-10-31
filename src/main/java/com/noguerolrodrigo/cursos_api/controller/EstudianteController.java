@@ -1,11 +1,11 @@
 package com.noguerolrodrigo.cursos_api.controller;
 
-import com.noguerolrodrigo.cursos_api.model.Curso;
-import com.noguerolrodrigo.cursos_api.model.Estudiante;
-import com.noguerolrodrigo.cursos_api.service.IEstudianteService; // <-- ¡La Interfaz!
+import com.noguerolrodrigo.cursos_api.entity.dto.curso.CursoDto;
+import com.noguerolrodrigo.cursos_api.entity.dto.estudiante.EstudianteCreate;
+import com.noguerolrodrigo.cursos_api.entity.dto.estudiante.EstudianteDto;
+import com.noguerolrodrigo.cursos_api.service.IEstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Set;
 
@@ -14,20 +14,20 @@ import java.util.Set;
 public class EstudianteController {
 
     @Autowired
-    private IEstudianteService estudianteService; // <-- ¡Inyecta la Interfaz!
+    private IEstudianteService estudianteService;
 
     @GetMapping
-    public List<Estudiante> listarEstudiantes() {
-        return estudianteService.listarEstudiantes(); // <-- Usa el nuevo servicio
+    public List<EstudianteDto> listarEstudiantes() {
+        return estudianteService.listarEstudiantes();
     }
 
     @PostMapping
-    public Estudiante crearEstudiante(@RequestBody Estudiante estudiante) {
-        return estudianteService.crearEstudiante(estudiante); // <-- Usa el nuevo servicio
+    public EstudianteDto crearEstudiante(@RequestBody EstudianteCreate dto) {
+        return estudianteService.crearEstudiante(dto);
     }
 
     @GetMapping("/{estudianteId}/cursos")
-    public Set<Curso> obtenerCursosPorEstudiante(@PathVariable Long estudianteId) {
-        return estudianteService.obtenerCursosPorEstudiante(estudianteId); // <-- Usa el nuevo servicio
+    public Set<CursoDto> obtenerCursosPorEstudiante(@PathVariable Long estudianteId) {
+        return estudianteService.obtenerCursosPorEstudiante(estudianteId);
     }
 }

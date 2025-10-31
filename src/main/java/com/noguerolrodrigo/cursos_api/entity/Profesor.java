@@ -1,26 +1,27 @@
-package com.noguerolrodrigo.cursos_api.model;
+package com.noguerolrodrigo.cursos_api.entity; // <-- ¡Este es el paquete!
 
-import lombok.*; // Import general
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter // Lombok: Solo Getters
-@Setter // Lombok: Solo Setters
-@ToString(exclude = "cursos") // Lombok: toString sin la lista de cursos
-@EqualsAndHashCode(exclude = "cursos") // Lombok: equals/hashCode sin la lista de cursos (¡LA SOLUCIÓN!)
+@Getter
+@Setter
+@ToString(exclude = "cursos")
+@EqualsAndHashCode(exclude = "cursos") // <-- Soluciona el bucle de Lombok
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Profesor {
+public class Profesor { // ¡Esta es tu "caja fuerte"!
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
-    private String email;
+    private String mail; // Lo pongo 'mail' para que coincida con tus DTOs
 
     @OneToMany(mappedBy = "profesor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("profesor")
